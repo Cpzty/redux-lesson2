@@ -19,8 +19,8 @@ const todo = (state,action)=>{
         }
         
         return{
-          ...todo,
-          completed: !todo.completed
+          ...state,
+          completed: !state.completed
         };
     default:
       return state;
@@ -87,20 +87,33 @@ class TodoApp extends Component{
       store.dispatch({
         type: 'ADD_TODO',
         text:this.input.value,
-        id:nextTodoId+=1
+        id:nextTodoId++
       });
       this.input.value='';
     }}>
       Add Todo</button>
       <ul>
         {this.props.todos.map(todo=>
-         <li key={todo.id}>
+         <li key={todo.id} 
+            onClick={()=>{
+          store.dispatch({
+            type: 'TOGGLE_TODO',
+            id:todo.id
+                                    
+          });                        
+          }}
+          style={{
+            textDecoration:
+                 todo.completed ?
+                 'line-through':
+                 'none'
+          }}>
             {todo.text}
           </li>
          )}
          </ul>
     </div>
-    )
+    );
   }
 }
 
@@ -117,9 +130,9 @@ store.subscribe(render);
 //this call renders the initial state
 render();
 
-const action = {
+/*const action = {
   type: 'TOGGLE_TODO',
   id:1
-}
+}*/
 
 
